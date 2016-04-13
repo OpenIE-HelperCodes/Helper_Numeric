@@ -12,7 +12,7 @@ public class Ner {
 
   public static Map<String, String> getNerTags(String str) throws Exception {
 
-    String serializedClassifier = "/home/harinder/Documents/IITD_MTP/iitd_mtp/NumericExtraction/extra_ws/Helper_Numeric/classifiers/english.muc.7class.distsim.crf.ser.gz";
+    String serializedClassifier = "/home/harinder/Documents/IITD_MTP/Open_nre/HelperCodes/Helper_Numeric/classifiers/english.muc.7class.distsim.crf.ser.gz";
 
     AbstractSequenceClassifier<CoreLabel> classifier = CRFClassifier.getClassifier(serializedClassifier);
 

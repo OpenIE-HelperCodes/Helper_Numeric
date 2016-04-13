@@ -193,7 +193,7 @@ public class Util_Numerical {
 		InputStream modelIn = null;
 
 		try {
-			modelIn = new FileInputStream("/home/harinder/Documents/IITD_MTP/iitd_mtp/NumericExtraction/extra_ws/Helper_Numeric/models/en-sent.bin");
+			modelIn = new FileInputStream("/home/harinder/Documents/IITD_MTP/Open_nre/HelperCodes/Helper_Numeric/models/en-sent.bin");
 			final SentenceModel sentenceModel = new SentenceModel(modelIn);
 			modelIn.close();
 			sentenceDetector = new SentenceDetectorME(sentenceModel);
