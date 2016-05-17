@@ -11,7 +11,7 @@ import edu.stanford.nlp.ling.CoreLabel;
 
 public class Ner {
 	
-	String serializedClassifier = "/home/harinder/Documents/IITD_MTP/Open_nre/HelperCodes/Helper_Numeric/classifiers/english.muc.7class.distsim.crf.ser.gz";
+	String serializedClassifier = FilePaths.filePath_classifier;
 	AbstractSequenceClassifier<CoreLabel> classifier;
 
 	public Ner() throws ClassCastException, ClassNotFoundException, IOException{
