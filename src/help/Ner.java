@@ -1,6 +1,7 @@
 package help;
 
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -9,12 +10,15 @@ import edu.stanford.nlp.ie.crf.CRFClassifier;
 import edu.stanford.nlp.ling.CoreLabel;
 
 public class Ner {
+	
+	String serializedClassifier = "/home/harinder/Documents/IITD_MTP/Open_nre/HelperCodes/Helper_Numeric/classifiers/english.muc.7class.distsim.crf.ser.gz";
+	AbstractSequenceClassifier<CoreLabel> classifier;
 
-  public static Map<String, String> getNerTags(String str) throws Exception {
+	public Ner() throws ClassCastException, ClassNotFoundException, IOException{
+		classifier = CRFClassifier.getClassifier(serializedClassifier);
+	}
 
-    String serializedClassifier = "/home/harinder/Documents/IITD_MTP/Open_nre/HelperCodes/Helper_Numeric/classifiers/english.muc.7class.distsim.crf.ser.gz";
-
-    AbstractSequenceClassifier<CoreLabel> classifier = CRFClassifier.getClassifier(serializedClassifier);
+  public Map<String, String> getNerTags(String str) throws Exception {
 
     String nerTagged = classifier.classifyToString(str, "slashTags", false);
     String[] nerTaggedArr = nerTagged.split(" ");
@@ -29,4 +33,5 @@ public class Ner {
     
     return nerMap;
   }
+  
 }

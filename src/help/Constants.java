@@ -24,7 +24,14 @@ public class Constants {
 					"Jan", "Feb", "Mar", "Apr", "Jun", "Jul"
 					, "Aug", "Sept", "Sep", "Oct", "Nov", "Dec",
 					"jan", "feb", "mar", "apr", "jun", "jul"
-					, "aug", "sept", "sep", "oct", "nov", "dec"});
+					, "aug", "sept", "sep", "oct", "nov", "dec", "minutes", "Part", "part", "times",
+					"minute", "weeks", "days", "hours", "AM", "PM", "am", "pm", "years", "year", "or", "and",
+					"o", "Page", "page", "Years", "Year" , "seconds", "Seconds", "Months", "months", "b."});
+	
+	public static final List<String> INVALID_PREV_WORDS = Arrays
+			.asList(new String[] { "Figure", "fig", "section", "fig.", "Fig.", 
+					"Table", "table", "'", "Example", "example", "eg.", "System", "system",
+					"article", "Article", "type", "Section", "task", "Task", "age", "Age"});
 	
 	public static final String KEYWORDS[] = { "population", "people",
 			"inhabitants", "natives", "residents", "people", "area", "land",

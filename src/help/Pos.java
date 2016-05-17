@@ -16,7 +16,7 @@ import edu.stanford.nlp.tagger.maxent.MaxentTagger;
  *
  */
 public class Pos {
-	public static List<TaggedWord> getPosTags(String sentence) throws Exception { //TODO not used as of now
+	public static List<TaggedWord> getPosTags(String sentence) throws Exception {
 	    MaxentTagger tagger = new MaxentTagger("models/english-left3words-distsim.tagger");
 	    
 	    List<HasWord> sent = Sentence.toWordList(sentence);

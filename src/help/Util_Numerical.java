@@ -4,12 +4,14 @@ package help;
  */
 
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -37,7 +39,7 @@ public class Util_Numerical {
 	private static StanfordCoreNLP pipeline;
 	private static Properties prop;
 	
-	/*private static boolean isSentenceWithMultipleNumbers(List<String> list_tokenStr) { //TODO
+	/*private static boolean isSentenceWithMultipleNumbers(List<String> list_tokenStr) {
 		for (String string : list_tokenStr) {
 			if(isNumber(token))
 		}
@@ -81,7 +83,7 @@ public class Util_Numerical {
 		String nerTag = nerTagMap.get(token);
 
 		if (nerTag == null) {
-			System.out.println("this shall be rare..returning true");
+			//System.out.println("this shall be rare..returning true");
 			return false;
 		}
 		if (nerTag.equals("DATE") || nerTag.equals("TIME") || nerTag.equals("DURATION"))
@@ -90,12 +92,13 @@ public class Util_Numerical {
 		return false;
 	}
 
-	public static void init() {
+	public static void init() throws ClassCastException, ClassNotFoundException, IOException {
 		numberPat = Pattern.compile("^[\\+-]?\\d+([,\\.]\\d+)*([eE]-?\\d+)?$");
 		yearPat = Pattern.compile("^19[56789]\\d|20[01]\\d$");
 		prop = new Properties();
 		prop.put("annotators", "tokenize, ssplit");
 		pipeline = new StanfordCoreNLP(prop);
+		Globals.ner = new Ner();
 	}
 	
 	private static List<String> getListOfTokenStrings(String str) throws Exception {
@@ -117,6 +120,7 @@ public class Util_Numerical {
 	private static boolean isInvalidWord(List<String> list_tokenStr, int index) throws Exception {
 		if(index == list_tokenStr.size()-1) return true; //no last word - thus invalid
 		if(Constants.INVALID_NEXT_WORDS.contains(list_tokenStr.get(index+1))) return true; //contains an invalid word
+		if(Constants.INVALID_PREV_WORDS.contains(list_tokenStr.get(index-1))) return true; //contains an invalid word
 		return false;
 	}
 
@@ -134,7 +138,7 @@ public class Util_Numerical {
 		// -------check that the number shall have a unit
 		
 		// ------- it shall contain a number and that shall not be a date or duration
-		Map<String, String> nerMap = Ner.getNerTags(str);
+		Map<String, String> nerMap = Globals.ner.getNerTags(str);
 		for (int index=0; index<list_tokenStr.size(); index++) {
 			// if (isNumber(tokenStr) && !isYear(tokenStr)) {
 			String tokenStr = list_tokenStr.get(index);
@@ -150,6 +154,19 @@ public class Util_Numerical {
 				// System.out.println(tokenStr + "- Yes");
 				//return true;
 			//}
+		}
+		
+		return false;
+	}
+	
+	public static boolean containsUnwantedCharacter(String str) {
+		Integer []wantedChars = {32,36,37,38,39,44,46,47,156,190,189};
+		List<Integer> wantedChars_list = Arrays.asList(wantedChars);
+		char []str_arr = str.toCharArray();
+		for (char c : str_arr) {
+			if(Character.isAlphabetic(c)) continue;
+			if(Character.isDigit(c)) continue;
+			if(!wantedChars_list.contains((int)c)) return true;
 		}
 		
 		return false;
@@ -213,5 +230,20 @@ public class Util_Numerical {
 		 * System.out.println(sentences[i]); }
 		 */
 		return sentences;
+	}
+	
+	public static void listFilesForFolder(final File folder, List<String> files) {
+		if (!folder.isDirectory()) {
+			files.add(folder.getPath());
+			return;
+		}
+	    for (final File fileEntry : folder.listFiles()) {
+	        if (fileEntry.isDirectory()) {
+	            listFilesForFolder(fileEntry, files);
+	        } else {
+	        	String fileName = fileEntry.getPath();
+	        	if(fileName.charAt(fileName.length()-1)!='~') files.add(fileEntry.getPath());
+	        }
+	    }
 	}
 }
