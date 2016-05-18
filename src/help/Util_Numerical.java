@@ -5,7 +5,6 @@ package help;
 
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.NumberFormat;
@@ -16,6 +15,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 import opennlp.tools.sentdetect.SentenceDetector;
@@ -99,6 +99,7 @@ public class Util_Numerical {
 		prop.put("annotators", "tokenize, ssplit");
 		pipeline = new StanfordCoreNLP(prop);
 		Globals.ner = new Ner();
+		Globals.sentenceDetector = getSentenceDetector();
 	}
 	
 	private static List<String> getListOfTokenStrings(String str) throws Exception {
@@ -204,13 +205,13 @@ public class Util_Numerical {
 
 		return true;
 	}
-
-	public static String[] sentenceSplitter(String sentenceToSplit) {
-		SentenceDetector sentenceDetector = null;
+	
+	public static SentenceDetector getSentenceDetector() {
 		InputStream modelIn = null;
-
+		SentenceDetector sentenceDetector = null;
 		try {
-			modelIn = new FileInputStream(FilePaths.filePath_model);
+			//modelIn = new FileInputStream(FilePaths.filePath_model);
+			modelIn = Util_Numerical.class.getResourceAsStream(FilePaths.filePath_model);
 			final SentenceModel sentenceModel = new SentenceModel(modelIn);
 			modelIn.close();
 			sentenceDetector = new SentenceDetectorME(sentenceModel);
@@ -224,15 +225,17 @@ public class Util_Numerical {
 				}
 			}
 		}
-		String sentences[] = (sentenceDetector.sentDetect(sentenceToSplit));
-		/*
-		 * for(int i=0; i<sentences.length;i++) {
-		 * System.out.println(sentences[i]); }
-		 */
+		
+		return sentenceDetector;
+	}
+
+	public static String[] sentenceSplitter(String sentenceToSplit) {
+		String sentences[] = (Globals.sentenceDetector.sentDetect(sentenceToSplit));
+
 		return sentences;
 	}
 	
-	public static void listFilesForFolder(final File folder, List<String> files) {
+	public static void listFilesForFolder(final File folder, Set<String> files) {
 		if (!folder.isDirectory()) {
 			files.add(folder.getPath());
 			return;
